@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MyCSSModule">
+<head>
+  <meta charset="UTF-8">
+  <title>NgShow</title>
+</head>
+<body>
+  <div ng-controller="DeathrayMenuController">
+    <button ng-click="toggleMenu()">Toggle Menu</button>
+    <ul ng-show="menuState.show">
+      <li ng-click="stun()">stun</li>
+      <li ng-click="disintrgrate()">Disintegrate</li>
+      <li ng-click="erase()">Erase from history</li>
+    </ul>
+  </div>
+  <script src="js/angular.js"></script>
+  <script src="js/NgShow.js"></script>
+</body>
+</html>
