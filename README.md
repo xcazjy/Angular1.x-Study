@@ -1,7 +1,7 @@
-# Angular1.x-Study
+# angular 
 
 - 特性1 MVC- model-view-controller
-- 特性2 module 模块化 一切都是从模块开始的
+- 特性2 module 模块化和依赖注入 一切都是从模块开始的
 - 特性3 指令系统
 - 特性4 双向数据绑定
 
@@ -62,3 +62,33 @@
 - 路由机制会影响到整个编码的方式（需要预先定义好）
 - 考虑兼容性问题与“优雅降级”
 
+# 2.5指令(Derective)
+## restrict-匹配模式
+E | 元素 | <my-menu title="Prducts"></my-menu>
+---|---|---
+A(默认) | 属性 | <div my-menu=Products></div>
+C | 样式类 | <div class=my-menu:Products></div>
+M | 注释 | <!-- directive:my-menu Products -->
+- 推荐使用元素和属性方式使用指令
+- 当需要创建有自己的模版的指令时，使用元素名称的方式创建指令
+- 当需要为自己的HTML标签增加功能时，使用属性的方式创建指令
+## template
+- template
+- templateUrl
+- templateCache 缓存起来在别处也能用
+## replace & transclude
+replace:true,替换内容
+
+templace:<div>替换内容</div>
+
+transclude:true,重要的配置项，嵌套不改变原有内容添加进去新内容
+
+template:<div>新内容<div ng-transclude></div></div>
+
+# compile & link
+加载阶段 | 加载angular.js，找到ng-app相当于main(),确定应用的边界
+--|--
+编译阶段 | - 遍历DOM，找到所有指令； - 根据指令代码中的template replace transclue转换DOM结构 - 如果存在compile函数则调用；（可以自定义compile调用自定义compile还要调用默认compile否则会被覆盖，所以一般不会自定义compile）
+链接阶段 | - 对每一条指令运行link函数；- link函数一般用来操作DOM、绑定事件监听器；
+
+## 指令和控制器之间进行交互
