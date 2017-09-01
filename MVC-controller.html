@@ -6,16 +6,16 @@
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/app.css">
 </head>
-<body ng-app>
+<body ng-app="MyModule">
   <div ng-controller="commoncontroller">
     <div ng-controller="controller1">
-      <input ng-model="greeting.text">
+      <input ng-model="greenting.text">
       <p><span ng-bind="greenting.text"></span>,angular</p>
       <button ng-click="test1()">test1</button>
     </div>
     <div ng-controller="controller2">
-      <input ng-model="greeting.text">
-      <p>{{greeting.text}},angular</p>
+      <input ng-model="greenting.text">
+      <p>{{greenting.text}},angular</p>
       <button ng-click="test2()">test2</button>
       <button ng-click="commonFn()">common</button>
     </div>
@@ -23,6 +23,6 @@
 <script src="js/jquery-3.2.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.js"></script>
-<script src="js/app.js"></script>
+<script src="MVC-controller.js"></script>
 </body>
 </html>
