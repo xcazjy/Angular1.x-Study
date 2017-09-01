@@ -43,11 +43,11 @@
 - $scope不仅是mvc的基础，也是实现双向数据绑定的基础
 - 可以用angular.element($0).scope()进行调试，获得当前元素上的$scope
 
-==^control+shift+k delete one line in sublime==
+==*control+shift+k delete one line in sublime==
 
 使用ng-bind来避免由于网速慢显示{{取值表达式}}内的内容影响用户体验，首页index加载页面使用
 
-==^control+shift+d copy one line to dowm in sublime==
+==*control+shift+d copy one line to dowm in sublime==
 
 # 2.4路由
 ## Ajax缺点（需要前端路由的原因）
@@ -85,10 +85,77 @@ transclude:true,重要的配置项，嵌套不改变原有内容添加进去新�
 
 template:<div>新内容<div ng-transclude></div></div>
 
-# compile & link
+## compile & link
 加载阶段 | 加载angular.js，找到ng-app相当于main(),确定应用的边界
 --|--
-编译阶段 | - 遍历DOM，找到所有指令； - 根据指令代码中的template replace transclue转换DOM结构 - 如果存在compile函数则调用；（可以自定义compile调用自定义compile还要调用默认compile否则会被覆盖，所以一般不会自定义compile）
-链接阶段 | - 对每一条指令运行link函数；- link函数一般用来操作DOM、绑定事件监听器；
+编译阶段 | 遍历DOM，找到所有指令； - 根据指令代码中的template replace transclue转换DOM结构 - 如果存在compile函数则调用；（可以自定义compile调用自定义compile还要调用默认compile否则会被覆盖，所以一般不会自定义compile）
+链接阶段 | 对每一条指令运行link函数；- link函数一般用来操作DOM、绑定事件监听器；
 
 ## 指令和控制器之间进行交互
+link可监听鼠标滑过事件
+
+```
+link:function(scope,element,attr){
+    element.bind('mouseenter',function(){
+        scope.loadDate();
+        scope.$apply('loadDate()');
+        // attr.howtoload() 获取函数 
+        // 注意之前函数用的驼峰法则写的，在这里调用要用小写
+        scope.$apply(attr.howtoload);
+        //调用函数，这里不要写函数调用形式，直接写属性
+    })
+}
+```
+==*注意之前函数用的驼峰法则写的，在这里调用要用小写==
+
+#### link有四个属性(scope,element,attr),还有一个富控制器
+
+==指令之间交互的方式是通过指令内部的controller暴露出来的方法来给外部进行调用==
+
+```
+myModule.directive("loader",function(){
+    return{
+        scope:{},
+        // 创建独立的作用域
+        restrict:'AE',
+        controller:function($scope){
+        // 这个controller和MVC里controller不是一个东西，指令内部暴露出一组pubulic方法给外部调用
+            $scope.abilities = [];
+            this.addStrength = function(){
+                $scope.abilities.push('strength');
+            };
+            this.addSpeed = function(){
+                $scope.abilities.push('speed');
+            };
+            this.addLight = function(){
+                $scope.abilities.push('light');
+            };
+        },
+        link:function(scope,element,attr){
+            element.addClass('btn btn-ptimary');
+            element.bind('mouseenter',function()
+            // angular内置jquery-light简化版语法和jquery一样
+            {
+                console.log(scope.abilities);
+            });
+        }
+    }
+});
+myModule.directive("speed".function(){
+    return {
+        require: '^superman',
+        // require 表示speed依赖于Superman这个指令里，写了requeire后link函数就可以写第4个参数，angularJS进行处理的时候会把supermanCtrl自动注射到指令的link函数里面来，这样就可以调用到superman控制器里面暴露出的方法了。
+        link: function(scope, element, attrs, supermanCtrl){
+            supermnCtrl.addSpeed();
+        }
+    }
+})
+
+在html里：
+<superman strength>力量</superman>
+<superman strength speed>力量 速度</superman>
+<superman strength speed light>力量 速度 发光</superman>
+```
+### 什么时候把逻辑写在controller里面，什么时候把逻辑写在link里面？
+- 想要你的指令暴露出来一些方法供外部去调用就写在controller里面。
+- link是用来处理指令内部的事物，如绑定事件、绑定数据。
