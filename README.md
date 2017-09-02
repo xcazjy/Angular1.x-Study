@@ -64,11 +64,11 @@
 
 # 2.5指令(Derective)
 ## restrict-匹配模式
-E | 元素 | <my-menu title="Prducts"></my-menu>
----|---|---
-A(默认) | 属性 | <div my-menu=Products></div>
-C | 样式类 | <div class=my-menu:Products></div>
-M | 注释 | <!-- directive:my-menu Products -->
+E | 元素 | `<my-menu title="Prducts"></my-menu> `
+:--- | :--- | ---
+A(默认) | 属性 | `<div my-menu=Products></div>` 
+C | 样式类 | `<div class=my-menu:Products></div> `
+M | 注释 | `<!-- directive:my-menu Products --> `
 - 推荐使用元素和属性方式使用指令
 - 当需要创建有自己的模版的指令时，使用元素名称的方式创建指令
 - 当需要为自己的HTML标签增加功能时，使用属性的方式创建指令
