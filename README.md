@@ -161,8 +161,60 @@ myModule.directive("speed".function(){
 - link是用来处理指令内部的事物，如绑定事件、绑定数据。
 
 # scope的绑定策略
-
 @ | 把当前属性作为字符串传递。你还可以绑定来自外层scope的值，在属性之中插入{{}}即可。
 --|--
 = | 与父scope中的属性进行双向绑定
 & | 传递一个来自父scope的函数，稍后调用
+
+# AngularJS内置的指令
+- a href为空时angular会做些处理，并不是html原生的
+## form指令
+- html原生的form表单是不能嵌套的，儿angular封装之后的form可以嵌套
+- angular为form扩展了自动校验、防止重复提交等功能
+- angular对input元素的type进行了扩展，一共提供了以下10种类型：text、==number、url、email==、radio、checkbox、hidden、button、submit、reset
+- angular为表单内置了4种css样式：ng-valid、ng-invalid、ng-pristine、ng-dirty
+- 内置校验器：require、minlength、maxlength
+
+# 2.6 Service与Provider
+内容简介
+- 使用$http服务
+- 创建自己的Service
+- Service的特性
+- Service、Factory、Provider本质上都是Provider
+- 使用$filter服务
+- 其它内置的Service介绍
+
+## Service的特性
+- Service都是==单例==的（在整个应用的框架里，只有一个实例）
+- Service有$injector负责实例化（不用自己去new一个service去调用，直接声明就好angularJS会帮助实例化）
+- Service在整个应用的生命周期中存在，可以用来==共享数据==
+- 在需要使用的地方利用==依赖注入==机制诸如Service
+- 自定义的Service需要写在内置的Service后面
+- 内置Service的命名以$符号开头，自定义Service应该避免
+## Service、Provider、Factory本质都是Provider
+```
+function provider(name, provider_){
+    if(isFunction(provider_)){
+        provider_ = providerInjector.instantiate(provider_);
+    }
+    if(!provider_.$get){
+        throw Error('provider'+name+' must define $get factory method')
+    }
+    return providerCache[name + providerSuffix] = provider_;
+}
+```
+- Serivce、Provider、Factory本质上都是Provider
+- provider模式是“策略模式”+“抽象工厂模式”的混合体
+## 使用$filter服务
+- $filter是用来进行数据格式化的专用服务
+- AngularJS内置9个filter：currency（货币¥、$）、date、filter、json、limitTo、lowercase、number（保留两位小数）、orderBy（排序）、uppercase
+## 其他常用的Service：内置的24个(看文档)
+- $compile：编译服务
+- $filter: 数据格式化工具，内衣了8个
+- $interval
+- $timeout
+- $locale 国际化
+- $loacation 监控地址栏的变化的
+- $log 日志
+- $parse
+- $http:封装了Ajax ==v1.5 中$http 的 success 和 error 方法已废弃。使用 then 方法替代。==
